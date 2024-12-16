@@ -1,13 +1,15 @@
 part of '../complex.dart';
 
 /// [Cartesian] is a [Complex] that save `real` and `imaginary` parts
-class Cartesian implements Complex {
+final class Cartesian implements Complex {
   /// Create a complex number given the real part and optionally the imaginary
   /// part.
   const Cartesian(this.real, [this.imaginary = 0]);
 
   @override
-  final double imaginary, real;
+  final double imaginary;
+  @override
+  final double real;
 
   @override
   bool get isFinite => !isNaN && real.isFinite && imaginary.isFinite;
@@ -158,8 +160,10 @@ class Cartesian implements Complex {
         // we don't use isInfinite to avoid testing for NaN again
         return Complex.infinity;
       }
-      return Cartesian(real * factor.real - imaginary * factor.imaginary,
-          real * factor.imaginary + imaginary * factor.real);
+      return Cartesian(
+        real * factor.real - imaginary * factor.imaginary,
+        real * factor.imaginary + imaginary * factor.real,
+      );
     } else if (factor is num) {
       if (isNaN || factor.isNaN) {
         return Complex.nan;
@@ -191,7 +195,9 @@ class Cartesian implements Complex {
       }
 
       return Cartesian(
-          real - subtrahend.real, imaginary - subtrahend.imaginary);
+        real - subtrahend.real,
+        imaginary - subtrahend.imaginary,
+      );
     } else if (subtrahend is num) {
       if (isNaN || subtrahend.isNaN) {
         return Complex.nan;
@@ -234,7 +240,9 @@ class Cartesian implements Complex {
       return Cartesian(t, imaginary / (2.0 * t));
     } else {
       return Cartesian(
-          imaginary.abs() / (2.0 * t), fastmath.copySign(1.0, imaginary) * t);
+        imaginary.abs() / (2.0 * t),
+        fastmath.copySign(1, imaginary) * t,
+      );
     }
   }
 
